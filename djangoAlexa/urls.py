@@ -19,7 +19,6 @@ from  api import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^bookaslot/', views.book_slot),
-    url(r'^booksloat/', views.book_a_slot),
-    url(r'^findsloat/', views.find_a_slot)
+    url(r'^book_slot/', views.book_a_slot),
+    url(r'^find_slot/', views.find_a_slot)
 ]

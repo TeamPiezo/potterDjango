@@ -9,8 +9,11 @@ from datetime import date, datetime
 import json as simplejson
 
 # Create your views here.
+
+
 def book_slot(self):
     return HttpResponse("Hei")
+
 
 def book_a_slot(request):
     username = request.GET.getlist('username')
@@ -24,17 +27,18 @@ def book_a_slot(request):
     bookslot.save()
     return HttpResponse("DATA SAVED SUCCESSFULLY")
 
+
 def find_a_slot(request):
     start_time = request.GET.get('starttime')
     # we added this so that we can have pet note type with '&' in between them
     # we replace the '&' with '_' from front-end so that it can be send
     # here we are converting it back to the previous(same) name
     all_sloats = list(range(24))
-    start_date = datetime.strptime(start_time, "YYYY-MM-DD")
+    start_date = datetime.strptime(start_time, "%Y-%m-%d")
     booked_sloats = Sloats.objects.filter(
         start_time__year=start_date.year,
         start_time__month=start_date.month,
         start_time__day=start_date.day
     ).only('start_time')
-    free_sloats = set(all_sloats) - set(booked_sloats)
-    return simplejson.dumps({"freesloats": free_sloats})
+    free_sloats = list(set(all_sloats) - set(booked_sloats))
+    return HttpResponse(simplejson.dumps({"freesloats": free_sloats}))
