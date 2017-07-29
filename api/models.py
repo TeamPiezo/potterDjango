@@ -16,6 +16,7 @@ class Sloats(models.Model):
 class MeetingNotes(models.Model):
     start_by_user = models.CharField(max_length=255)
     sloats = models.ForeignKey(Sloats)
+    status = models.CharField(max_length=20)
     
 class Tasks(models.Model):
     task = models.CharField(max_length=255)

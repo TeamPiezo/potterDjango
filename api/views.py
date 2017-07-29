@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Sloats
+from .models import Sloats, MeetingNotes
 from datetime import date, datetime, time
 import json as simplejson
 
@@ -62,4 +62,36 @@ def cancel_slot(request):
         if obj.start_time.hour == slot_time.hour:
             obj.delete()
             return HttpResponse(simplejson.dumps({"status": "success"}))
+    return HttpResponse(simplejson.dumps({"status": "not_exist"}))
+
+def start_meeting(request):
+    date_min = datetime.combine(date.today(), time.min)
+    date_max = datetime.combine(date.today(), time.max)
+    start_time = datetime.now().time().hour
+    objectVal = Sloats.objects.filter(start_time__range=(date_min, date_max))
+    try:
+        for obj in objectVal:
+            if obj.start_time.hour == start_time:
+                username = obj.username
+                meeting_notes_obj = MeetingNotes(start_by_user=username, sloats=obj, status='START')
+                print("meeting_notes_obj", meeting_notes_obj)
+                meeting_notes_obj.save()
+        return HttpResponse(simplejson.dumps({"status": "success"}))
+    except Exception as e:
+        print(e)
+    return HttpResponse(simplejson.dumps({"status": "not_exist"}))
+    
+def end_meeting(request):
+    date_min = datetime.combine(date.today(), time.min)
+    date_max = datetime.combine(date.today(), time.max)
+    start_time = datetime.now().time().hour
+    objectVal = Sloats.objects.filter(start_time__range=(date_min, date_max))
+    try:
+        for obj in objectVal:
+            if obj.start_time.hour == start_time:
+                username = obj.username
+                MeetingNotes.objects.filter(sloats=obj).update(status='END')
+        return HttpResponse(simplejson.dumps({"status": "success"}))
+    except Exception as e:
+        print(e)
     return HttpResponse(simplejson.dumps({"status": "not_exist"}))

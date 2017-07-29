@@ -22,4 +22,6 @@ urlpatterns = [
     url(r'^book_slot/', views.book_a_slot),
     url(r'^find_slot/', views.find_a_slot),
     url(r'^cancel_slot/', views.cancel_slot),
+    url(r'^start_meeting/', views.start_meeting),
+    url(r'^end_meeting/', views.end_meeting),
 ]
