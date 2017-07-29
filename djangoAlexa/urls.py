@@ -20,5 +20,6 @@ from  api import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^book_slot/', views.book_a_slot),
-    url(r'^find_slot/', views.find_a_slot)
+    url(r'^find_slot/', views.find_a_slot),
+    url(r'^cancel_slot/', views.cancel_slot),
 ]

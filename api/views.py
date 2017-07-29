@@ -48,3 +48,18 @@ def find_a_slot(request):
     booked_sloats = [i.start_time.hour for i in list(booked_sloats)]
     free_sloats = list(set(all_sloats) - set(booked_sloats))
     return HttpResponse(simplejson.dumps({"status": "success", "freesloats": free_sloats}))
+
+def cancel_slot(request):
+    slot_time = request.GET.get('slot_time')
+    slot_time = datetime.strptime(slot_time, '%H:%M')
+    #slot_time = str(slot_time)
+    slot_date = request.GET.get('slot_date')
+    slot_date = datetime.strptime(slot_date, '%Y-%m-%d')
+    date_min = datetime.combine(slot_date, time.min)
+    date_max = datetime.combine(slot_date, time.max)
+    objectVal = Sloats.objects.filter(start_time__range=(date_min, date_max))
+    for obj in objectVal:
+        if obj.start_time.hour == slot_time.hour:
+            obj.delete()
+            return HttpResponse(simplejson.dumps({"status": "success"}))
+    return HttpResponse(simplejson.dumps({"status": "not_exist"}))
