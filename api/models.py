@@ -10,7 +10,7 @@ class Sloat(models.Model):
 
 class Sloats(models.Model):
     username = models.CharField(max_length=255)
-    start_time = models.DateTimeField()
+    start_time = models.DateTimeField(unique=True)
     booked_by_user = models.CharField(max_length=255)
 
 class MeetingNotes(models.Model):
